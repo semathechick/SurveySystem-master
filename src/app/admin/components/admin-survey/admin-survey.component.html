@@ -1,0 +1,13 @@
+<form [formGroup]="surveyForm" (ngSubmit)="addToDb()">
+  <div class="bg-white border rounded-lg px-8 py-6 mx-auto my-8 max-w-2xl">
+    <input class="text-2xl font-medium mb-4" id="surveyTitle" formControlName="surveyTitle" placeholder="Survey Title" />
+    <div>
+      <button type="submit"  [disabled]="!surveyForm.valid" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">Add Survey</button>
+    </div>
+  </div>
+</form>
+
+
+
+  
+  
