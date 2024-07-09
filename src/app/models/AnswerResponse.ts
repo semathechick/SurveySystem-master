@@ -1,7 +1,7 @@
-import { Survey } from "./app/models/survey";
+import { Question } from "./question";
 
-export interface QuestionResponse {
-    items:Survey[];
+export interface AnswerResponse {
+    items:Question[];
     count: number;
     index: number;
     size: number;

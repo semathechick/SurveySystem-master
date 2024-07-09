@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Question } from '../../../models/question';
 import { QuestionService } from '../../../services/question.service';
@@ -11,7 +11,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FilterSurveyPipe } from '../../../survey-pipe.pipe';
 import { AccordionModule } from 'ngx-bootstrap/accordion';
-import { QuestionResponse } from '../../../../QuestionResponse';
+import { QuestionResponse } from '../../../models/QuestionResponse';
 
 @Component({
   selector: 'app-add-question',
@@ -24,7 +24,6 @@ export class AddQuestionComponent implements OnInit {
   questionForm!: FormGroup;
   surveys: any[] = []; 
   selectedSurvey: Survey = { id: '', surveyTitle: '' };
-  selectedSurveyName:Survey| any;
   searchKey : string = ' ';
 
   constructor(
@@ -84,13 +83,32 @@ export class AddQuestionComponent implements OnInit {
     }
   }
 
-  selectSurvey(survey: Survey): void {
+  selectSurvey(survey: any): void {
     this.selectedSurvey = survey; 
     this.questionForm.patchValue({
       surveyId: survey.id 
     });
+    this.surveySelected.emit(); 
   }
+  @Output() surveySelected = new EventEmitter<void>();
 
+  onSurveySelected(event: any): void {
+}
+
+  onSurveySelect(event: Event): void {
+    const selectedSurveyId = (event.target as HTMLSelectElement).value;
+  
+    if (selectedSurveyId) {
+      this.selectedSurvey = this.surveys.find(survey => survey.id === selectedSurveyId);
+      console.log('Selected survey:', this.selectedSurvey);
+    } else {
+      console.error('Invalid selected survey id:', selectedSurveyId);
+    }
+  }
+  onInputChange(event: Event): void {
+    const inputValue = (event.target as HTMLInputElement).value;
+    console.log('Input value:', inputValue);
+  }
   addToDb(): void {
     if (this.questionForm.valid) {
       const formDataQuestion: Question = this.questionForm.value;

@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Question } from '../models/question';
 import { Observable } from 'rxjs';
+import { AnswerResponse } from '../models/AnswerResponse';
 
 @Injectable({
   providedIn: 'root'
@@ -21,6 +22,11 @@ export class QuestionService {
   getQuestionsBySurveyId(surveyId: string): Observable<Question[]> {
     const url = `${this.apiUrl}/GetBySurveyId/${surveyId}`;
     return this.httpClient.get<Question[]>(url);
+  }
+
+  selectedQuestion: any;
+  getAllQuestions(): Observable<AnswerResponse> {
+    return this.httpClient.get<AnswerResponse>(this.apiUrl +'?PageIndex=0&PageSize=11');
   }
 }
 

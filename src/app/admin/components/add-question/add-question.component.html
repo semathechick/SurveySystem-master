@@ -1,20 +1,22 @@
 <div class="container flex flex-row justify-center">
-  <div class="inner-container flex flex-row max-w-2xl bg-white border rounded-lg px-8 py-6 mr-4">
-    <form [formGroup]="questionForm" (ngSubmit)="addToDb()" class="w-1/2">
+  <div class="inner-container flex flex-row max-w-full bg-white border rounded-lg px-8 py-6 mr-4">
+    <form [formGroup]="questionForm" (ngSubmit)="addToDb()" class="w-full">
       <input class="text-2xl font-medium mb-4" id="question" formControlName="indvQuestion" placeholder="Question" />
       <div>
         <button type="submit" [disabled]="!questionForm.valid" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">Soru ekle</button>
       </div>
     </form>
     <accordion class="w-1/2">
-      <accordion-group heading="Anket Seç">
-      <p *ngFor="let survey of surveys | FilterSurveyPipe:searchKey" class="accordion-button">
-        {{ survey.surveyTitle }}
-      </p>
-    </accordion-group>
+      <accordion-group class="button1"  (surveySelected)="onSurveySelected($event)" [heading]="selectedSurvey.surveyTitle || 'Anket Seç'">
+        <p *ngFor="let survey of surveys | FilterSurveyPipe:searchKey" class="accordion-button" (click)="selectSurvey(survey)">
+          {{ survey.surveyTitle }}
+        </p>
+      </accordion-group>
     </accordion>
   </div>
 </div>
+
+
 
 
 

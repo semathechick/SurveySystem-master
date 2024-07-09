@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { Survey } from '../../../models/survey';
 import { SurveyService } from '../../../services/survey.service';
 import { RouterModule } from '@angular/router';
-import { QuestionResponse } from '../../../../QuestionResponse';
+import { QuestionResponse } from '../../../models/QuestionResponse';
 
 @Component({
   selector: 'app-admin-survey',
@@ -70,8 +70,6 @@ export class AdminSurveyComponent implements OnInit {
       });
     }
   }
-
-  
 
   addToDb(): void {
     if (this.surveyForm.valid) {
