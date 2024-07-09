@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { Survey } from '../../../models/survey';
 import { SurveyService } from '../../../services/survey.service';
 import { RouterModule } from '@angular/router';
+import { QuestionResponse } from '../../../../QuestionResponse';
 
 @Component({
   selector: 'app-admin-survey',
@@ -45,8 +46,9 @@ export class AdminSurveyComponent implements OnInit {
 
   loadSurveys(): void {
     this.surveyService.getAllSurveys().subscribe({
-      next: (surveys) => {
-        this.surveys = surveys;
+      next: (response :QuestionResponse) => {
+        console.log('API response:', response);
+        this.surveys = response.items;
       },
       error: (error) => {
         console.error('Error loading surveys:', error);

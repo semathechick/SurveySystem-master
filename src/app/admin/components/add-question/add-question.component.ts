@@ -10,13 +10,13 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FilterSurveyPipe } from '../../../survey-pipe.pipe';
-import { DropdownModule } from '@coreui/angular';
-
+import { AccordionModule } from 'ngx-bootstrap/accordion';
+import { QuestionResponse } from '../../../../QuestionResponse';
 
 @Component({
   selector: 'app-add-question',
   standalone:true,
-  imports:[ReactiveFormsModule,FormsModule,MatFormFieldModule, MatSelectModule, MatInputModule,FilterSurveyPipe,CommonModule,DropdownModule],
+  imports:[ReactiveFormsModule,FormsModule,MatFormFieldModule, MatSelectModule, MatInputModule,FilterSurveyPipe,CommonModule,AccordionModule],
   templateUrl: './add-question.component.html',
   styleUrls: ['./add-question.component.scss']
 })
@@ -24,6 +24,7 @@ export class AddQuestionComponent implements OnInit {
   questionForm!: FormGroup;
   surveys: any[] = []; 
   selectedSurvey: Survey = { id: '', surveyTitle: '' };
+  selectedSurveyName:Survey| any;
   searchKey : string = ' ';
 
   constructor(
@@ -35,7 +36,9 @@ export class AddQuestionComponent implements OnInit {
   ngOnInit(): void {
     this.createQuestionForm();
     this.loadSurveys();
+
   }
+  
 
   createQuestionForm(): void {
     this.questionForm = this.formBuilder.group({
@@ -43,17 +46,28 @@ export class AddQuestionComponent implements OnInit {
       indvQuestion: ['', Validators.required]
     });
   }
-
+  
   loadSurveys(): void {
-    this.surveyService.getAllSurveys().subscribe({
-      next: (surveys) => {
-        this.surveys = surveys;
-      },
-      error: (error) => { 
-        console.error('Error loading surveys:', error);
+  this.surveyService.getAllSurveys().subscribe({
+    next: (response: QuestionResponse) => {
+      console.log('API response:', response);
+
+      // Inspect the response structure
+      console.log('Response keys:', Object.keys(response));
+
+      // Check if response.surveys is an array
+      if (response.items && Array.isArray(response.items)) {
+        this.surveys = response.items;
+        console.log('Surveys loaded:', this.surveys);
+      } else {
+        console.error('Unexpected response format:', response);
       }
-    });
-  }
+    },
+    error: (error) => {
+      console.error('Error loading surveys:', error);
+    }
+  });
+}
 
   createQuestion(): void {
     if (this.questionForm.valid) {

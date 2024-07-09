@@ -1,0 +1,17 @@
+.accordion-button {
+    background-color: #fff; /* Button background color */
+    border: 1px solid #ddd; /* Button border */
+    padding: 10px 20px; /* Button padding */
+    cursor: pointer; /* Simulate button behavior */
+    border-radius: 5px;
+    width:250px /* Rounded corners */
+  }
+
+  .accordion-button:hover {
+    background-color: #eee; /* Button hover effect */
+  }
+
+  /* Add styles for active accordion group (optional) */
+  .accordion-group.in .accordion-button {
+    background-color: #ddd; /* Change background for active group */
+  }

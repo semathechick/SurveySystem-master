@@ -1,14 +1,21 @@
-<form [formGroup]="questionForm" (ngSubmit)="addToDb()">
-  <c-dropdown [autoClose]="'inside'">
-    <button cButton cDropdownToggle color="secondary">
-      Dropdown
-    </button>
-    <div cDropdownMenu [ngStyle]="{ 'minWidth.px': 200 }" class="p-4 text-medium-emphasis">
-      <p>Some example text that's free-flowing within the dropdown menu.</p>
-      <p class="mb-0">And this is more example text.</p>
-    </div>
-  </c-dropdown>
-</form>
+<div class="container flex flex-row justify-center">
+  <div class="inner-container flex flex-row max-w-2xl bg-white border rounded-lg px-8 py-6 mr-4">
+    <form [formGroup]="questionForm" (ngSubmit)="addToDb()" class="w-1/2">
+      <input class="text-2xl font-medium mb-4" id="question" formControlName="indvQuestion" placeholder="Question" />
+      <div>
+        <button type="submit" [disabled]="!questionForm.valid" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">Soru ekle</button>
+      </div>
+    </form>
+    <accordion class="w-1/2">
+      <accordion-group heading="Anket Seç">
+      <p *ngFor="let survey of surveys | FilterSurveyPipe:searchKey" class="accordion-button">
+        {{ survey.surveyTitle }}
+      </p>
+    </accordion-group>
+    </accordion>
+  </div>
+</div>
+
 
 
 
