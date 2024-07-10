@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Question } from '../models/question';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { AnswerResponse } from '../models/AnswerResponse';
 
 @Injectable({
@@ -20,8 +20,10 @@ export class QuestionService {
   }
 
   getQuestionsBySurveyId(surveyId: string): Observable<Question[]> {
-    const url = `${this.apiUrl}/GetBySurveyId/${surveyId}`;
-    return this.httpClient.get<Question[]>(url);
+    return this.httpClient.get<Question[]>(this.apiUrl + '/questions')
+      .pipe(
+        map(questions => questions.filter(question => question.surveyId === surveyId))
+      );
   }
 
   selectedQuestion: any;

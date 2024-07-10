@@ -1,0 +1,36 @@
+.accordion-button {
+    background-color: #f8f8f8; /* Button background color */
+    border: 2px solid #ddd; /* Button border */
+    padding: 10px 30px; /* Button padding */
+    cursor: pointer; 
+    border-radius: 5px;
+    width:default; 
+  }
+
+  .accordion-button:hover {
+    background-color: #eee; /* Button hover effect */
+  }
+
+  .accordion-group.in .accordion-button {
+    background-color: #ddd; 
+  }
+.button1{
+  border: 2px solid #ddd; 
+  margin-top:5px;
+}
+.container {
+  display: flex; 
+  flex-direction: column;
+  justify-content: space-between; 
+}
+
+.inner-container {
+  flex: 1; 
+  margin: 10px; 
+  border: 1px solid #ddd; 
+  border-radius: 0.5rem; 
+}
+
+.inner-container form {
+  width: 100%; 
+}

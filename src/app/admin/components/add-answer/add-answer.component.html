@@ -1,7 +1,7 @@
 <div class="container flex flex-row justify-center">
     <div class="inner-container flex flex-row max-w-full bg-white border rounded-lg px-8 py-6 mr-4">
       <form [formGroup]="answerForm" (ngSubmit)="addToDb()" class="w-full">
-        <input class="text-2xl font-medium mb-4" id="question" formControlName="indvQuestion" placeholder="Answer" />
+        <input class="text-2xl font-medium mb-4" id="answer" formControlName="userAnswer" placeholder="Answer" />
         <div>
           <button type="submit" [disabled]="!answerForm.valid" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">Cevap ekle</button>
         </div>

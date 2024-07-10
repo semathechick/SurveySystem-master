@@ -17,10 +17,9 @@ import { AnswerResponse } from '../../../models/AnswerResponse';
   styleUrl: './add-answer.component.scss'
 })
 export class AddAnswerComponent {
-
   answerForm!: FormGroup;
   questions: Question[] = [];
-  selectedQuestion: Question = { indvQuestion: '', surveyId: '' };
+  selectedQuestion: Question = { id: '', indvQuestion: '', surveyId: '' };
   searchKey : string = ' ';
 
   constructor(
@@ -35,8 +34,9 @@ export class AddAnswerComponent {
   }
   selectQuestion(question: any): void {
     this.selectedQuestion = question; 
-    this.answerForm.patchValue({
-      questionId: question.id 
+    this.answerForm.setValue({
+      questionId: question.id,
+      userAnswer:this.answerForm.value.userAnswer
     });
     this.surveySelected.emit(); 
   }
@@ -64,33 +64,16 @@ export class AddAnswerComponent {
   }
   onQuestionSelected(event: any): void {}
 
-  onQuestionSelect(event: Event): void {
-    const selectedQuestionId = (event.target as HTMLSelectElement).value;
-  
-    if (selectedQuestionId) {
-      this.selectedQuestion = this.questions.find(question => question.surveyId === selectedQuestionId) as Question;
-      console.log('Selected survey:', this.selectedQuestion);
-    } else {
-      console.error('Invalid selected survey id:', selectedQuestionId);
-    }
-  }
-  onInputChange(event: Event): void {
-    const inputValue = (event.target as HTMLInputElement).value;
-    console.log('Input value:', inputValue);
-  }
 
 createAnswerForm(): void {
   this.answerForm = this.formBuilder.group({
-    id: ['', Validators.required], 
     userAnswer: ['', Validators.required],
-    questionId:['', Validators.required],
-    indvQuestion: ['',Validators.required],
+    questionId:['', Validators.required]
   });
 }
  addToDb(): void {
   if (this.answerForm.valid) {
     const formDataAnswer: Answer = this.answerForm.value;
-    const questionId = formDataAnswer.questionId;
    
     this.answerService.addAnswer(formDataAnswer).subscribe({
       next: (answerResponse) => {

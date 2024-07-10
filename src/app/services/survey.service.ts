@@ -3,6 +3,8 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Survey } from '../models/survey';
 import { QuestionResponse } from '../models/QuestionResponse';
+import { Question } from '../models/question';
+import { Answer } from '../models/answer';
 
 @Injectable({
   providedIn: 'root'
@@ -20,4 +22,8 @@ export class SurveyService {
   addSurvey(survey: Survey): Observable<Survey> {
     return this.httpClient.post<Survey>(this.apiUrl, survey);
   }
+  getSurveyById(id: string): Observable<Survey> {
+    return this.httpClient.get<Survey>(`${this.apiUrl}/Surveys/${id}`);
+  }
+
 }

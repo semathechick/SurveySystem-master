@@ -1,1 +1,23 @@
+<div class="survey-container">
+    <form [formGroup]="surveyForm" class="w-full">
+      <h1>{{ selectedSurvey.surveyTitle }}</h1>
+  
+      <div *ngFor="let survey of surveys">
+  
+        <h2>{{ survey.surveyTitle }}</h2>
+  
+        <div *ngFor="let question of getQuestionsBySurveyId(survey.id)">
+          <h3>{{ question.indvQuestion }}</h3>
+  
+          <div *ngFor="let answer of getAnswersForQuestion(question).answers">
+            <div class="radio-container">
+              <input type="radio" name="{{ question.id }}" [value]="answer.id" />
+              <label for="{{ answer.id }}">{{ answer.userAnswer }}</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
 
+  
