@@ -1,4 +1,6 @@
+
+
 export interface Survey {
     id: string,
-    surveyTitle:string
+    surveyTitle:string;
 }

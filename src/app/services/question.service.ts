@@ -3,6 +3,8 @@ import { Injectable } from '@angular/core';
 import { Question } from '../models/question';
 import { map, Observable } from 'rxjs';
 import { AnswerResponse } from '../models/AnswerResponse';
+import { UiQuestionBySurveyResponse } from '../models/UiQuestionBySurveyResponse';
+import { Survey } from '../models/survey';
 
 @Injectable({
   providedIn: 'root'
@@ -19,16 +21,20 @@ export class QuestionService {
     return this.httpClient.post<Question>(this.apiUrl, question, { headers });
   }
 
-  getQuestionsBySurveyId(surveyId: string): Observable<Question[]> {
-    return this.httpClient.get<Question[]>(this.apiUrl + '/questions')
-      .pipe(
-        map(questions => questions.filter(question => question.surveyId === surveyId))
-      );
+  getSurveyByQuestionId(surveyId: string): Observable<Question[]> {
+    return this.httpClient.get<Question[]>(`http://localhost:60805/Survey/${surveyId}`);
   }
 
   selectedQuestion: any;
   getAllQuestions(): Observable<AnswerResponse> {
     return this.httpClient.get<AnswerResponse>(this.apiUrl +'?PageIndex=0&PageSize=11');
+  }
+  getQuestionsById(id: string): Observable<Question[]> {
+    return this.httpClient.get<Question[]>(`${this.apiUrl}/${id}`);
+  }
+
+  getQuestionsBySurveyId(surveyId: string): Observable<Question[]> {
+    return this.httpClient.get<Question[]>(`http://localhost:60805/Questions/Survey${surveyId}`);
   }
 }
 

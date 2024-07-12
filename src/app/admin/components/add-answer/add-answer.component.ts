@@ -19,7 +19,7 @@ import { AnswerResponse } from '../../../models/AnswerResponse';
 export class AddAnswerComponent {
   answerForm!: FormGroup;
   questions: Question[] = [];
-  selectedQuestion: Question = { id: '', indvQuestion: '', surveyId: '' };
+  selectedQuestion: Question = {  indvQuestion: '', surveyId: '' };
   searchKey : string = ' ';
 
   constructor(

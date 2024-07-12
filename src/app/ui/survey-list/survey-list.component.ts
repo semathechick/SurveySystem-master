@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { RouterModule } from '@angular/router';
-import { Survey } from '../../../models/survey';
-import { SurveyService } from '../../../services/survey.service';
-import { QuestionResponse } from '../../../models/QuestionResponse';
+import { ActivatedRoute, RouterModule } from '@angular/router';
+import { Survey } from '../../models/survey';
+import { SurveyService } from '../../services/survey.service';
+import { QuestionResponse } from '../../models/QuestionResponse';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { catchError, map, Observable, of } from 'rxjs';
 
 @Component({
   selector: 'app-survey-list',
@@ -15,12 +16,15 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 })
 export class SurveyListComponent implements OnInit {
    surveyForm!: FormGroup;
-   surveys: Survey[]=[];
+   surveys!: Observable<Survey[]>;
+   surveyId:string | null=null;
    constructor(private surveyService: SurveyService,private formBuilder:FormBuilder) {}
+   
 
    ngOnInit(): void {
     this.loadSurveys();
     this.createSurveyForm();
+  
   }
   createSurveyForm(): void {
     this.surveyForm = this.formBuilder.group({
@@ -30,22 +34,24 @@ export class SurveyListComponent implements OnInit {
   }
 
   loadSurveys(): void {
-    this.surveyService.getAllSurveys().subscribe({
-      next: (response:QuestionResponse) => {
+    this.surveys = this.surveyService.getAllSurveys().pipe(
+      map((response: QuestionResponse) => {
         console.log('API response:', response);
-  
         console.log('Response keys:', Object.keys(response));
-  
+
         if (response.items && Array.isArray(response.items)) {
-          this.surveys = response.items;
-          console.log('Surveys loaded:', this.surveys);
+          console.log('Surveys loaded:', response.items);
+          return response.items;
         } else {
           console.error('Unexpected response format:', response);
+          return [];
         }
-      },
-      error: (error) => {
+      }),
+      catchError(error => {
         console.error('Error loading surveys:', error);
-      }
-    });
+        return of([]);
+      })
+    );
   }
+  
 }

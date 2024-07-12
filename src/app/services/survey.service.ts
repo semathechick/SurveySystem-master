@@ -23,7 +23,7 @@ export class SurveyService {
     return this.httpClient.post<Survey>(this.apiUrl, survey);
   }
   getSurveyById(id: string): Observable<Survey> {
-    return this.httpClient.get<Survey>(`${this.apiUrl}/Surveys/${id}`);
+    return this.httpClient.get<Survey>(`${this.apiUrl}/${id}`);
   }
 
 }
