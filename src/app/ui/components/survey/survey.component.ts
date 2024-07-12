@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { Survey } from '../../../models/survey';
 import { CommonModule } from '@angular/common';
@@ -12,7 +12,7 @@ import { QuestionService } from '../../../services/question.service';
 @Component({
   selector: 'app-survey',
   standalone: true,
-  imports: [RouterModule, CommonModule, ReactiveFormsModule],
+  imports: [RouterModule, CommonModule, ReactiveFormsModule,FormsModule],
   templateUrl: './survey.component.html',
   styleUrls: ['./survey.component.scss']
 })
@@ -38,7 +38,7 @@ export class SurveyComponent {
    
 
  ngOnInit(): void {
-  const selectedQuestion:Question={indvQuestion:'',surveyId:''};
+  const selectedQuestion:Question={indvQuestion:'', surveyId:''};
   this.createSurveyForm();
   this.surveyId = this.route.snapshot.params['id'];
     if (this.surveyId) {
@@ -49,13 +49,13 @@ export class SurveyComponent {
 }
   
 
-  createSurveyForm(): void {
-    this.surveyForm = this.formBuilder.group({
-      surveyTitle: ['', Validators.required],
-      surveyId: ['', Validators.required],
-      indvQuestion: ['', Validators.required],
-    });
-  }
+createSurveyForm(): void {
+  this.surveyForm = this.formBuilder.group({
+    surveyTitle: ['', Validators.required],
+    surveyId: ['', Validators.required],
+    questions: this.formBuilder.array([])  // FormArray başlangıçta boş olmalı
+  });
+}
 
   
   loadSurveyById(surveyId: string): void {
@@ -72,19 +72,39 @@ export class SurveyComponent {
       });
   }
 
-
+  get questionsFormArray(): FormArray {
+    return this.surveyForm.get('questions') as FormArray;
+  }
+  
   loadQuestionsBySurveyId(surveyId: string): void {
+    
     this.questionService.getQuestionsBySurveyId(surveyId)
       .pipe(
         catchError(error => {
           console.error('Error fetching questions for survey ID:', surveyId, error);
-          return of([]); 
+          return of([]);
         })
       )
-      .subscribe((questions: Question[]) => {
-        this.questions = questions; 
-        console.log('Questions loaded successfully:', questions);
-  
+      .subscribe((response: any) => {
+        // Yanıtın yapısını kontrol edelim ve questions dizisini çıkartalım
+        if (Array.isArray(response)) {
+          this.questions = response;
+        } else if (response && response.questions && Array.isArray(response.questions)) {
+          this.questions = response.questions;
+        } else {
+          this.questions = [];
+        }
+
+        const questionsFormArray = this.surveyForm.get('questions') as FormArray;
+        if (questionsFormArray) {
+          questionsFormArray.clear();
+          this.questions.forEach(question => {
+            questionsFormArray.push(this.formBuilder.group({
+              indvQuestion: [question.indvQuestion, Validators.required]
+            }));
+          });
+        }
+       
       });
   }
   

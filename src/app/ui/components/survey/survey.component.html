@@ -1,12 +1,18 @@
-<div *ngIf="survey?.id">
-  <h2>{{ survey?.surveyTitle }}</h2>
-  <ul *ngIf="questions.length > 0">
-    <li *ngFor="let question of questions">
-      {{ question.indvQuestion }}
-    </li>
-  </ul>
-  <p *ngIf="questions.length === 0">No questions found for this survey.</p>
-</div>
+<form [formGroup]="surveyForm">
+  <div *ngIf="survey?.id">
+    <h2>{{ survey?.surveyTitle }}</h2>
+    <div formArrayName="questions">
+      <ul *ngIf="questionsFormArray.controls.length > 0">
+        <li *ngFor="let questionControl of questionsFormArray.controls; let i = index" [formGroupName]="i">
+          <input formControlName="indvQuestion" [value]="questionControl.value.indvQuestion" />
+        </li>
+      </ul>
+      <p *ngIf="questionsFormArray.controls.length === 0">No questions found for this survey.</p>
+    </div>
+  </div>
+</form>
+
+
 
   
   
